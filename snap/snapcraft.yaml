@@ -16,6 +16,10 @@ apps:
     command: bin/zkServer-initialize.sh --config /snap/zookeeper/current/conf
     environment:
       JAVA_HOME: $SNAP/usr/lib/jvm/java-8-openjdk-amd64/jre
+  cli:
+    command: bin/zkCli.sh --config /snap/zookeeper/current/conf
+    environment:
+      JAVA_HOME: $SNAP/usr/lib/jvm/java-8-openjdk-amd64/jre
   daemon:
     command: bin/zkServer.sh --config /snap/zookeeper/current/conf start
     plugs: [network, network-bind, removable-media]
@@ -24,9 +28,11 @@ apps:
     environment:
       JAVA_HOME: $SNAP/usr/lib/jvm/java-8-openjdk-amd64/jre
       ZOO_LOG_DIR: /var/snap/zookeeper/common
-      # LOG_DIR: $SNAP_COMMON/log
-      # ZOO_DATADIR: $SNAP_COMMON
     stop-command: bin/zkServer.sh --config /snap/zookeeper/current/conf stop
+  status:
+    command: bin/zkServer.sh --config /snap/zookeeper/current/conf status
+    environment:
+      JAVA_HOME: $SNAP/usr/lib/jvm/java-8-openjdk-amd64/jre
 
 parts:
   zookeeper:
@@ -34,18 +40,8 @@ parts:
     source: https://dlcdn.apache.org/zookeeper/zookeeper-${SNAPCRAFT_PROJECT_VERSION}/apache-zookeeper-${SNAPCRAFT_PROJECT_VERSION}-bin.tar.gz
     stage-packages:
     - openjdk-8-jre-headless
-    # build-environment:
-    # - JAVA_HOME: /usr/lib/jvm/java-8-openjdk-amd64/
     override-build: |-
       snapcraftctl build
       sed -i "s:dataDir=/tmp/zookeeper:dataDir=/var/snap/zookeeper/common:g" conf/zoo_sample.cfg
       cp conf/zoo_sample.cfg conf/zoo.cfg
-      sed -i '158i echo $ZOO_LOG_DIR' bin/zkServer.sh
-      sed -i "s:#!/usr/bin/env bash:#!/bin/bash -x:g" bin/zkServer.sh
       cp -r ./* $SNAPCRAFT_PART_INSTALL
-    # override-prime: |
-    #   snapcraftctl prime
-    #   # remove dangling symlink
-    #   # https://forum.snapcraft.io/t/resolve-package-contains-external-symlinks-error-when-trying-to-snap/2963
-    #   # https://bugs.openjdk.java.net/browse/JDK-8253866
-    #   rm -vf usr/lib/jvm/java-11-openjdk-*/lib/security/blacklisted.certs
