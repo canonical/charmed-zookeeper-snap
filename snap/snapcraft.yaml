@@ -16,17 +16,17 @@ apps:
     command: bin/zkServer-initialize.sh --config /snap/zookeeper/current/conf
     environment:
       JAVA_HOME: $SNAP/usr/lib/jvm/java-8-openjdk-amd64/jre
-  service:
+  daemon:
     command: bin/zkServer.sh --config /snap/zookeeper/current/conf start
     plugs: [network, network-bind, removable-media]
     install-mode: enable
-    daemon: simple
+    daemon: forking
     environment:
       JAVA_HOME: $SNAP/usr/lib/jvm/java-8-openjdk-amd64/jre
       ZOO_LOG_DIR: /var/snap/zookeeper/common
       # LOG_DIR: $SNAP_COMMON/log
       # ZOO_DATADIR: $SNAP_COMMON
-    # stop-command: bin/zkServer.sh --config /snap/zookeeper/current/conf stop
+    stop-command: bin/zkServer.sh --config /snap/zookeeper/current/conf stop
 
 parts:
   zookeeper:
