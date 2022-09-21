@@ -12,26 +12,19 @@ confinement: devmode
 
 apps:
   init:
-    command: bin/zkServer-initialize.sh --config /snap/zookeeper/current/conf
-    environment:
-      JAVA_HOME: $SNAP/usr/lib/jvm/java-8-openjdk-amd64/jre
+    command: with_config.sh bin/zkServer-initialize.sh
   cli:
-    command: bin/zkCli.sh --config /snap/zookeeper/current/conf
-    environment:
-      JAVA_HOME: $SNAP/usr/lib/jvm/java-8-openjdk-amd64/jre
+    command: with_config.sh bin/zkCli.sh
   daemon:
-    command: bin/zkServer.sh --config /snap/zookeeper/current/conf start
+    command: with_config.sh bin/zkServer.sh start
     plugs: [network, network-bind, removable-media]
     install-mode: enable
     daemon: forking
     environment:
-      JAVA_HOME: $SNAP/usr/lib/jvm/java-8-openjdk-amd64/jre
       ZOO_LOG_DIR: /var/snap/zookeeper/common
-    stop-command: bin/zkServer.sh --config /snap/zookeeper/current/conf stop
+    stop-command: with_config.sh bin/zkServer.sh stop
   status:
-    command: bin/zkServer.sh --config /snap/zookeeper/current/conf status
-    environment:
-      JAVA_HOME: $SNAP/usr/lib/jvm/java-8-openjdk-amd64/jre
+    command: with_config.sh bin/zkServer.sh status
 
 parts:
   zookeeper:
@@ -44,3 +37,6 @@ parts:
       sed -i "s:dataDir=/tmp/zookeeper:dataDir=/var/snap/zookeeper/common:g" conf/zoo_sample.cfg
       cp conf/zoo_sample.cfg conf/zoo.cfg
       cp -r ./* $SNAPCRAFT_PART_INSTALL
+  wrapper:
+    plugin: dump
+    source: snap/local
