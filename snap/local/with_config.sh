@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eu
+set -e
 
 export CONFIG_FILE="${SNAP_COMMON}/zoo.cfg"
 if [ ! -f "${CONFIG_FILE}" ]; then
@@ -14,4 +14,9 @@ export LOG_DIR="${SNAP_COMMON}/log"
 export JAVA_HOME=$SNAP/usr/lib/jvm/java-8-openjdk-amd64/jre
 export ZOOCFGDIR="${SNAP_COMMON}"
 
-"${SNAP}/${1}" --config "${SNAP_COMMON}" $2
+if [ -z $2 ]
+then
+	"${SNAP}/${1}" --config "${SNAP_COMMON}"
+else
+	"${SNAP}/${1}" --config "${SNAP_COMMON}" $2
+fi
