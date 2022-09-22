@@ -7,8 +7,8 @@ description: |
   information, naming, providing distributed synchronization, and 
   providing group services.
 
-grade: devel
-confinement: devmode
+grade: stable
+confinement: strict
 
 apps:
   init:
