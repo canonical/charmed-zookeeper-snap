@@ -14,9 +14,4 @@ export LOG_DIR="${SNAP_COMMON}/log"
 export JAVA_HOME=$SNAP/usr/lib/jvm/java-8-openjdk-amd64/jre
 export ZOOCFGDIR="${SNAP_COMMON}"
 
-if [ -z $2 ]
-then
-	"${SNAP}/${1}" --config "${SNAP_COMMON}"
-else
-	"${SNAP}/${1}" --config "${SNAP_COMMON}" $2
-fi
+"${SNAP}/${1}" --config "${SNAP_COMMON}" $2
