@@ -35,7 +35,6 @@ parts:
     override-build: |-
       snapcraftctl build
       sed -i "s:dataDir=/tmp/zookeeper:dataDir=/var/snap/zookeeper/common:g" conf/zoo_sample.cfg
-      cp conf/zoo_sample.cfg conf/zoo.cfg
       cp -r ./* $SNAPCRAFT_PART_INSTALL
   wrapper:
     plugin: dump
