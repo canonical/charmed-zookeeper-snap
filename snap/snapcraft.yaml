@@ -36,6 +36,9 @@ parts:
       snapcraftctl build
       sed -i "s:dataDir=/tmp/zookeeper:dataDir=/var/snap/zookeeper/common:g" conf/zoo_sample.cfg
       cp -r ./* $SNAPCRAFT_PART_INSTALL
+    override-prime: |-
+      snapcraftctl prime
+      rm -vf usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/cacerts
   wrapper:
     plugin: dump
     source: snap/local
