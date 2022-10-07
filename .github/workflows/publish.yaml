@@ -1,5 +1,12 @@
 on:
   workflow_call:
+  workflow_dispatch:
+
+inputs:
+  channel:
+    default: stable
+    required: true
+    description: Channel to publish the snap.
 
 jobs:
   publish:
@@ -13,4 +20,4 @@ jobs:
           SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.STORE_LOGIN }}
         with:
           snap: ${{ steps.build.outputs.snap }}
-          release: $INPUT_BRANCH
+          release: $INPUT_CHANNEL

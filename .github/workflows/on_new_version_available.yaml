@@ -59,7 +59,7 @@ jobs:
       matrix:
         versions: ${{ fromJson(needs.get-versions-diff.outputs.matrix) }}
     with:
-      branch: ${{ matrix.versions }}
+      channel: ${{ matrix.versions }}/stable
 
   open-issue:
     runs-on: ubuntu-latest

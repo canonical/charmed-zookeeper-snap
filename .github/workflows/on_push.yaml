@@ -11,4 +11,4 @@ jobs:
     name: Publish Snap
     uses: ./.github/workflows/publish.yaml
     with:
-      branch: $GITHUB_REF_NAME
+      channel: $GITHUB_REF_NAME
