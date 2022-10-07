@@ -10,8 +10,10 @@ if [ ! -f "${CONFIG_FILE}" ]; then
 fi
 
 export PATH="${SNAP}/usr/lib/jvm/default-java/bin:${PATH}"
-export LOG_DIR="${SNAP_COMMON}/log"
-export JAVA_HOME=$SNAP/usr/lib/jvm/java-8-openjdk-amd64/jre
+export JAVA_HOME="${SNAP}/usr/lib/jvm/java-8-openjdk-amd64/jre"
+export ZOO_LOG_DIR="${SNAP_COMMON}/logs"
 export ZOOCFGDIR="${SNAP_COMMON}"
+
+cp -r "${SNAP}/conf/log4j.properties" ${SNAP_COMMON}
 
 "${SNAP}/${1}" --config "${SNAP_COMMON}" $2
