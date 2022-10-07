@@ -1,12 +1,16 @@
 on:
   workflow_call:
+    inputs:
+      channel:
+        default: stable
+        required: true
+        description: Channel to publish the snap.
   workflow_dispatch:
-
-inputs:
-  channel:
-    default: stable
-    required: true
-    description: Channel to publish the snap.
+    inputs:
+      channel:
+        default: stable
+        required: true
+        description: Channel to publish the snap.
 
 jobs:
   publish:
