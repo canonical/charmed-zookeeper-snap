@@ -10,6 +10,6 @@ jobs:
   publish:
     name: Publish Snap
     uses: ./.github/workflows/publish.yaml
+    secrets: inherit
     with:
       channel: $GITHUB_REF_NAME
-      store-login: ${{ secrets.STORE_LOGIN }}

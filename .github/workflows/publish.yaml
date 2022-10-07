@@ -6,9 +6,6 @@ on:
         required: true
         description: Channel to publish the snap.
         type: string
-      login:
-        required: true
-        description: Login credentials for publishing.
   workflow_dispatch:
     inputs:
       channel:
@@ -16,9 +13,6 @@ on:
         required: true
         description: Channel to publish the snap.
         type: string
-      store-login:
-        required: true
-        description: Login credentials for publishing.
 
 jobs:
   publish:

@@ -58,9 +58,9 @@ jobs:
     strategy:
       matrix:
         versions: ${{ fromJson(needs.get-versions-diff.outputs.matrix) }}
+    secrets: inherit
     with:
       channel: ${{ matrix.versions }}/stable
-      store-login: ${{ secrets.STORE_LOGIN }}
 
   open-issue:
     runs-on: ubuntu-latest
