@@ -5,12 +5,14 @@ on:
         default: stable
         required: true
         description: Channel to publish the snap.
+        type: string
   workflow_dispatch:
     inputs:
       channel:
         default: stable
         required: true
         description: Channel to publish the snap.
+        type: string
 
 jobs:
   publish:
