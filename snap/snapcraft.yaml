@@ -18,10 +18,8 @@ apps:
   daemon:
     command: with_config.sh bin/zkServer.sh start
     plugs: [network, network-bind, removable-media]
-    install-mode: enable
+    install-mode: disable
     daemon: forking
-    environment:
-      ZOO_LOG_DIR: /var/snap/zookeeper/common
     stop-command: with_config.sh bin/zkServer.sh stop
   status:
     command: with_config.sh bin/zkServer.sh status
@@ -35,6 +33,10 @@ parts:
     override-build: |-
       snapcraftctl build
       sed -i "s:dataDir=/tmp/zookeeper:dataDir=/var/snap/zookeeper/common:g" conf/zoo_sample.cfg
+      echo "dataLogDir=/var/snap/zookeeper/common" >> conf/zoo_sample.cfg
+      sed -i "s:zookeeper.log.dir=.:zookeeper.log.dir=/var/snap/zookeeper/common/logs:g" conf/log4j.properties
+      sed -i "s:zookeeper.root.logger=INFO, CONSOLE:zookeeper.root.logger=INFO, CONSOLE, ROLLINGFILE, TRACEFILE:g" conf/log4j.properties
+      sed -i "s:zookeeper.log.threshold=INFO:zookeeper.log.threshhold=DEBUG:g" conf/log4j.properties
       cp -r ./* $SNAPCRAFT_PART_INSTALL
   wrapper:
     plugin: dump
