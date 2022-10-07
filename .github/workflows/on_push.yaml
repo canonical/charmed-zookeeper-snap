@@ -12,3 +12,4 @@ jobs:
     uses: ./.github/workflows/publish.yaml
     with:
       channel: $GITHUB_REF_NAME
+      store-login: ${{ secrets.STORE_LOGIN }}
