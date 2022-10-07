@@ -1,0 +1,14 @@
+on:
+  push:
+    branches:
+      - '*.*.*/stable'
+  workflow_dispatch:
+    branches:
+      - '*.*.*/stable'
+
+jobs:
+  publish:
+    name: Publish Snap
+    uses: ./.github/workflows/publish.yaml
+    with:
+      branch: $GITHUB_REF_NAME
