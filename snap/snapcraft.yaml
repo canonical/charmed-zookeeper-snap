@@ -1,6 +1,6 @@
 name: zookeeper
 base: core22
-version: '3.6.3'
+version: '3.6.4'
 summary: Apache Zookeeper in a snap.
 description: |
   ZooKeeper is a centralized service for maintaining configuration 
