@@ -10,19 +10,30 @@ description: |
 grade: stable
 confinement: strict
 
+system-usernames:
+  snap_daemon: shared
+
+hooks:
+  install:
+    plugs:
+      - network
+      - network-bind
+
+environment:
+  JAVA_HOME: ${SNAP_COMMON}/jvm/java-8-openjdk-amd64/jre
+  ZOO_LOG_DIR: ${SNAP_COMMON}/logs
+  ZOO_LOG4J_PROP: INFO,CONSOLE
+  ZOOCFGDIR: ${SNAP_COMMON}/conf
+
 apps:
-  init:
-    command: with_config.sh bin/zkServer-initialize.sh
-  cli:
-    command: with_config.sh bin/zkCli.sh
-  daemon:
-    command: with_config.sh bin/zkServer.sh start
-    plugs: [network, network-bind, removable-media]
+   daemon:
+    command: with_config.sh bin/zkServer.sh start-foreground
+    plugs:
+      - network
+      - network-bind
+      - removable-media
     install-mode: disable
-    daemon: forking
-    stop-command: with_config.sh bin/zkServer.sh stop
-  status:
-    command: with_config.sh bin/zkServer.sh status
+    daemon: simple
 
 parts:
   zookeeper:
@@ -30,17 +41,23 @@ parts:
     source: https://dlcdn.apache.org/zookeeper/zookeeper-${SNAPCRAFT_PROJECT_VERSION}/apache-zookeeper-${SNAPCRAFT_PROJECT_VERSION}-bin.tar.gz
     stage-packages:
     - openjdk-8-jre-headless
+    - util-linux
+    - curl
     override-build: |-
       snapcraftctl build
-      sed -i "s:dataDir=/tmp/zookeeper:dataDir=/var/snap/zookeeper/common:g" conf/zoo_sample.cfg
-      echo "dataLogDir=/var/snap/zookeeper/common" >> conf/zoo_sample.cfg
-      sed -i "s:zookeeper.log.dir=.:zookeeper.log.dir=/var/snap/zookeeper/common/logs:g" conf/log4j.properties
-      sed -i "s:zookeeper.root.logger=INFO, CONSOLE:zookeeper.root.logger=INFO, CONSOLE, ROLLINGFILE, TRACEFILE:g" conf/log4j.properties
-      sed -i "s:zookeeper.log.threshold=INFO:zookeeper.log.threshhold=DEBUG:g" conf/log4j.properties
       cp -r ./* $SNAPCRAFT_PART_INSTALL
     override-prime: |-
       snapcraftctl prime
       rm -vf usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/cacerts
+  prometheus-exporter:
+    plugin: nil
+    after: [zookeeper]
+    override-build: |
+      curl -o jmx_prometheus_javaagent.jar "https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.17.0/jmx_prometheus_javaagent-0.17.0.jar"
+      EXPECTED_SHA="48ab23a7514f9de5d2ca0acbb8ed1573b3c2ecbef7c5dc4d37c4ba125e538199"
+      JAR_SHA=$(sha256sum jmx_prometheus_javaagent.jar | cut -d " " -f1)
+      if [ $JAR_SHA != $EXPECTED_SHA ]; then exit 1; fi
+      cp jmx_prometheus_javaagent.jar $SNAPCRAFT_PART_INSTALL/
   wrapper:
     plugin: dump
     source: snap/local

@@ -1,15 +1,13 @@
 on:
   push:
     branches:
-      - '*.*.*/stable'
+      - '*.*/*'
   workflow_dispatch:
     branches:
-      - '*.*.*/stable'
+      - '*.*/*'
 
 jobs:
   publish:
     name: Publish Snap
     uses: ./.github/workflows/publish.yaml
     secrets: inherit
-    with:
-      channel: $GITHUB_REF_NAME

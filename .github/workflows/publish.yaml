@@ -1,29 +1,17 @@
 on:
   workflow_call:
-    inputs:
-      channel:
-        default: stable
-        required: true
-        description: Channel to publish the snap.
-        type: string
   workflow_dispatch:
-    inputs:
-      channel:
-        default: stable
-        required: true
-        description: Channel to publish the snap.
-        type: string
 
 jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: snapcore/action-build@v1
         id: build
       - uses: snapcore/action-publish@v1
         env:
-          SNAPCRAFT_STORE_CREDENTIALS: $INPUT_STORE_LOGIN
+          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.STORE_LOGIN }}
         with:
           snap: ${{ steps.build.outputs.snap }}
-          release: $INPUT_CHANNEL
+          release: ${{ github.ref_name }}

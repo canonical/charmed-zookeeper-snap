@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+set -eux
+
+function set_default_properties () {
+    for DIR in log-data logs conf opt/zookeeper;
+    do
+        mkdir -p "${SNAP_COMMON}"/$DIR
+        chmod -R 774 "${SNAP_COMMON}"/$DIR
+        chown -R snap_daemon "${SNAP_COMMON}"/$DIR
+    done
+
+    ls -lah "${SNAP_COMMON}"
+
+    cp "${SNAP}"/log4j.properties "${SNAP_COMMON}"/conf/log4j.properties
+    cp -rL "${SNAP}"/usr/lib/jvm/ "${SNAP_COMMON}"/
+    cp "${SNAP}"/jmx_prometheus_javaagent.jar "${SNAP_COMMON}"/opt/zookeeper/jmx_prometheus_javaagent.jar
+    cp "${SNAP}"/jmx_prometheus.yaml "${SNAP_COMMON}"/conf/jmx_prometheus.yaml
+
+    ls -lah "${SNAP_COMMON}"
+    ls -lah "${SNAP_COMMON}"/jvm
+
+    chmod -R 774 ${SNAP_COMMON}/conf/log4j.properties
+    chmod -R 774 ${SNAP_COMMON}/jvm
+    chmod -R 774 ${SNAP_COMMON}/opt/zookeeper/jmx_prometheus_javaagent.jar
+    chmod -R 774 ${SNAP_COMMON}/conf/jmx_prometheus.yaml
+
+    chown -R snap_daemon ${SNAP_COMMON}/conf/log4j.properties
+    chown -R snap_daemon ${SNAP_COMMON}/jvm
+    chown -R snap_daemon ${SNAP_COMMON}/opt/zookeeper/jmx_prometheus_javaagent.jar
+    chown -R snap_daemon ${SNAP_COMMON}/conf/jmx_prometheus.yaml
+}
+
+set_default_properties
