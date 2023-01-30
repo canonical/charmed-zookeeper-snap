@@ -13,6 +13,12 @@ confinement: strict
 system-usernames:
   snap_daemon: shared
 
+hooks:
+  install:
+    plugs:
+      - network
+      - network-bind
+
 apps:
   init:
     command: with_config.sh bin/zkServer-initialize.sh

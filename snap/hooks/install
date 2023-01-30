@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+function set_default_properties () {
+    mkdir "${SNAP_COMMON}"/data
+    mkdir "${SNAP_COMMON}"/log
+    mkdir "${SNAP_COMMON}"/logs
+
+    cp "${SNAP}"/conf/zoo_sample.cfg "${SNAP_COMMON}"/zoo.cfg
+    cp "${SNAP}"/conf/log4j.properties "${SNAP_COMMON}"/log4j.properties
+    cp -rL "${SNAP}"/usr/lib/jvm "${SNAP_COMMON}"
+
+    chmod -R 770 ${SNAP_COMMON}
+    chown -R snap_daemon ${SNAP_COMMON}
+    chgrp root ${SNAP_COMMON}
+}
+
+set_default_properties
