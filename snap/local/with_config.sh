@@ -16,4 +16,9 @@ export ZOOCFGDIR="${SNAP_COMMON}"
 
 cp -r "${SNAP}/conf/log4j.properties" ${SNAP_COMMON}
 
-"${SNAP}/${1}" --config "${SNAP_COMMON}" $2
+
+"${SNAP}"/usr/bin/setpriv \
+    --clear-groups \
+    --reuid snap_daemon \
+    --regid snap_daemon -- \
+    "${SNAP}/${1}" --config "${SNAP_COMMON}" $2

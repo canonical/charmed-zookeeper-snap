@@ -10,6 +10,9 @@ description: |
 grade: stable
 confinement: strict
 
+system-usernames:
+  snap_daemon: shared
+
 apps:
   init:
     command: with_config.sh bin/zkServer-initialize.sh
@@ -17,7 +20,10 @@ apps:
     command: with_config.sh bin/zkCli.sh
   daemon:
     command: with_config.sh bin/zkServer.sh start
-    plugs: [network, network-bind, removable-media]
+    plugs:
+      - network
+      - network-bind
+      - removable-media
     install-mode: disable
     daemon: forking
     stop-command: with_config.sh bin/zkServer.sh stop
@@ -30,6 +36,7 @@ parts:
     source: https://dlcdn.apache.org/zookeeper/zookeeper-${SNAPCRAFT_PROJECT_VERSION}/apache-zookeeper-${SNAPCRAFT_PROJECT_VERSION}-bin.tar.gz
     stage-packages:
     - openjdk-8-jre-headless
+    - util-linux
     override-build: |-
       snapcraftctl build
       sed -i "s:dataDir=/tmp/zookeeper:dataDir=/var/snap/zookeeper/common:g" conf/zoo_sample.cfg
