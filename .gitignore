@@ -1,1 +1,5 @@
 *.snap
+exported.txt
+*__pycache__
+vm-operator
+k8s-operator

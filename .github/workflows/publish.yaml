@@ -1,6 +1,17 @@
 on:
+  push:
+    branches:
+      - '[0-9]+.[0-9]+/*'
+  schedule:
+    - cron: '0 12 * * 3'
   workflow_call:
   workflow_dispatch:
+
+inputs:
+  release:
+    description: Release for snap formatted track/risk/channel
+    required: true
+    default: ${{ github.ref_name }}
 
 jobs:
   publish:
@@ -14,4 +25,4 @@ jobs:
           SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.STORE_LOGIN }}
         with:
           snap: ${{ steps.build.outputs.snap }}
-          release: ${{ github.ref_name }}
+          release: $INPUT_RELEASE
