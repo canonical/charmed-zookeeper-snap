@@ -14,10 +14,10 @@ jobs:
     strategy:
       matrix:
         env:
-          - integration
-          - integration-provider
-          - integration-scaling
-          - integration-tls
+          - vm-integration
+          - vm-integration-provider
+          - vm-integration-scaling
+          - vm-integration-tls
       fail-fast: false
     steps:
       - name: Checkout repository
