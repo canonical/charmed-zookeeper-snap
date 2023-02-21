@@ -1,8 +1,0 @@
-on:
-  workflow_call:
-
-jobs:
-  build-and-upload:
-    uses: ./.github/workflows/publish.yaml
-    with:
-      release: ${{ github.base_ref }}/${{ github.ref_name }}
