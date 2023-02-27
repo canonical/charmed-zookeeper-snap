@@ -38,9 +38,9 @@ apps:
 parts:
   zookeeper:
     plugin: nil
-    source: >
-      https://dlcdn.apache.org/zookeeper/zookeeper-${SNAPCRAFT_PROJECT_VERSION}
-      /apache-zookeeper-${SNAPCRAFT_PROJECT_VERSION}-bin.tar.gz
+    source: "https://dlcdn.apache.org/zookeeper/zookeeper-\
+      ${SNAPCRAFT_PROJECT_VERSION}\
+      /apache-zookeeper-${SNAPCRAFT_PROJECT_VERSION}-bin.tar.gz"
     stage-packages:
       - openjdk-8-jre-headless
       - util-linux
