@@ -2,16 +2,23 @@ on:
   push:
     branches:
       - '[0-9]+.[0-9]+/*'
-  schedule:
-    - cron: '0 12 * * 3'
+    inputs:
+      release:
+        description: Release for snap formatted track/risk/channel
+        required: true
+        type: string
   workflow_call:
+    inputs:
+      release:
+        description: Release for snap formatted track/risk/channel
+        required: true
+        type: string
   workflow_dispatch:
-
-inputs:
-  release:
-    description: Release for snap formatted track/risk/channel
-    required: true
-    default: ${{ github.ref_name }}
+    inputs:
+      release:
+        description: Release for snap formatted track/risk/channel
+        required: true
+        type: string
 
 jobs:
   publish:
