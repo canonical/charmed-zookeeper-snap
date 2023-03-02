@@ -41,7 +41,10 @@ apps:
 slots:
   logs:
     interface: content
-    target: ${SNAP_COMMON}/logs
+    content: logs
+    source:
+      read: 
+        - $SNAP_COMMON/logs
 
 
 parts:
