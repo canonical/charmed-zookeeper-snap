@@ -32,8 +32,17 @@ apps:
       - network
       - network-bind
       - removable-media
+    slots:
+      - logs
     install-mode: disable
     daemon: simple
+
+
+slots:
+  logs:
+    interface: content
+    target: ${SNAP_COMMON}/logs
+
 
 parts:
   zookeeper:
