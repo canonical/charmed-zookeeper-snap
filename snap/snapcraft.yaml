@@ -20,10 +20,10 @@ hooks:
       - network-bind
 
 environment:
-  JAVA_HOME: ${SNAP_COMMON}/jvm/java-8-openjdk-amd64/jre
-  ZOO_LOG_DIR: ${SNAP_COMMON}/logs
+  JAVA_HOME: ${SNAP}/opt/zookeeper/jvm/java-8-openjdk-amd64/jre
+  ZOO_LOG_DIR: ${SNAP_COMMON}/var/log/zookeeper
   ZOO_LOG4J_PROP: INFO,CONSOLE
-  ZOOCFGDIR: ${SNAP_COMMON}/conf
+  ZOOCFGDIR: ${SNAP_DATA}/etc/zookeeper
 
 apps:
    daemon:
