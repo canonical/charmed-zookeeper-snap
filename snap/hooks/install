@@ -14,8 +14,7 @@ mkdir -p $LOGS
 mkdir -p $DATA
 mkdir -p $BINARIES
 
-cp "${SNAP}"/log4j.properties $CONF
-cp "${SNAP}"/jmx_prometheus.yaml $CONF
+cp "${SNAP}"/etc/zookeeper/* $CONF
 
 chmod -R 770 "${SNAP_DATA}"/*
 chmod -R 770 "${SNAP}"/*
