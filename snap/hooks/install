@@ -15,8 +15,6 @@ mkdir -p $DATA
 mkdir -p $BINARIES
 
 cp "${SNAP}"/log4j.properties $CONF
-cp -rL "${SNAP}"/usr/lib/jvm/ $BINARIES
-cp "${SNAP}"/jmx_prometheus_javaagent.jar $BINARIES
 cp "${SNAP}"/jmx_prometheus.yaml $CONF
 
 chmod -R 770 "${SNAP_DATA}"/*

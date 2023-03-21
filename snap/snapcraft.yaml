@@ -58,6 +58,8 @@ parts:
     override-prime: |-
       snapcraftctl prime
       rm -vf usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/cacerts
+      mkdir -p $SNAPCRAFT_PART_INSTALL/opt/zookeeper
+      mv usr/lib/jvm $SNAPCRAFT_PART_INSTALL/opt/zookeeper
   prometheus-exporter:
     plugin: nil
     after: [zookeeper]
@@ -67,6 +69,8 @@ parts:
       JAR_SHA=$(sha256sum jmx_prometheus_javaagent.jar | cut -d " " -f1)
       if [ $JAR_SHA != $EXPECTED_SHA ]; then exit 1; fi
       cp jmx_prometheus_javaagent.jar $SNAPCRAFT_PART_INSTALL/
+    organize:
+      jmx_prometheus_javaagent.jar: opt/zookeeper/jvm/java-8-openjdk-amd64/jre/lib/jmx_prometheus_javaagent.jar
   wrapper:
     plugin: dump
     source: snap/local
