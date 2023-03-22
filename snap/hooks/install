@@ -14,7 +14,7 @@ mkdir -p $LOGS
 mkdir -p $DATA
 mkdir -p $BINARIES
 
-cp "${SNAP}"/etc/zookeeper/* $CONF
+cp "${SNAP}"/etc/$COMPONENT/* $CONF
 
 chmod -R 770 "${SNAP_DATA}"/*
 chmod -R 770 "${SNAP}"/*
