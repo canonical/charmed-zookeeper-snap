@@ -24,7 +24,7 @@ environment:
 
 apps:
    daemon:
-    command: opt/zookeeper/binaries/with_config.sh bin/zkServer.sh start-foreground
+    command: opt/zookeeper/with_config.sh bin/zkServer.sh start-foreground
     plugs:
       - network
       - network-bind
