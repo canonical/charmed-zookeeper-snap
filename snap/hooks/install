@@ -17,9 +17,7 @@ mkdir -p $BINARIES
 cp "${SNAP}"/opt/$COMPONENT/conf/* $CONF
 
 chmod -R 770 "${SNAP_DATA}"/*
-chmod -R 770 "${SNAP}"/*
 chmod -R 770 "${SNAP_COMMON}"/*
 
 chown -R snap_daemon "${SNAP_DATA}"/*
-chown -R snap_daemon "${SNAP}"/*
 chown -R snap_daemon "${SNAP_COMMON}"/*
