@@ -6,4 +6,4 @@ set -e
     --clear-groups \
     --reuid snap_daemon \
     --regid snap_daemon -- \
-    "${SNAP}/${1}" --config "${SNAP_COMMON}"/conf $2
+    "${SNAP}/${1}" --config "${SNAP_COMMON}"/etc/zookeeper $2
