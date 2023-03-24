@@ -1,12 +1,9 @@
-name: zookeeper
+name: charmed-zookeeper
 base: core22
 version: '3.6.4'
 summary: Apache Zookeeper in a snap.
 description: |
-  ZooKeeper is a centralized service for maintaining configuration 
-  information, naming, providing distributed synchronization, and 
-  providing group services.
-
+  This is a snap that bundles Apache ZooKeeper together with other tools of its ecosystem in order to be used in Charmed Operators, providing automated operations management from day 0 to day 2 on the Apache ZooKeeper distributed coodrdinator, on top of a Virtual Machine cluster and K8s cluster. It is an open source, end-to-end, production ready data platform on top of cloud native technologies.
 grade: stable
 confinement: strict
 
@@ -20,32 +17,28 @@ hooks:
       - network-bind
 
 environment:
-  JAVA_HOME: ${SNAP_COMMON}/jvm/java-8-openjdk-amd64/jre
-  ZOO_LOG_DIR: ${SNAP_COMMON}/logs
-  ZOO_LOG4J_PROP: INFO,CONSOLE
-  ZOOCFGDIR: ${SNAP_COMMON}/conf
+  JAVA_HOME: ${SNAP}/usr/lib/jvm/java-8-openjdk-amd64/jre
+  ZOO_LOG_DIR: ${SNAP_COMMON}/var/log/zookeeper
+  ZOO_LOG4J_PROP: INFO,CONSOLE,ROLLINGFILE
+  ZOO_LOG_FILE: zookeeper.log
+  ZOOCFGDIR: ${SNAP_DATA}/etc/zookeeper
 
 apps:
    daemon:
-    command: with_config.sh bin/zkServer.sh start-foreground
+    command: opt/zookeeper/with_config.sh bin/zkServer.sh start-foreground
     plugs:
       - network
       - network-bind
       - removable-media
-    slots:
-      - logs
     install-mode: disable
     daemon: simple
-
 
 slots:
   logs:
     interface: content
-    content: logs
     source:
       read: 
-        - $SNAP_COMMON/logs
-
+        - $SNAP_COMMON/var/log/zookeeper
 
 parts:
   zookeeper:
@@ -61,6 +54,7 @@ parts:
     override-prime: |-
       snapcraftctl prime
       rm -vf usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/cacerts
+      mkdir -p $SNAPCRAFT_PART_INSTALL/opt/zookeeper
   prometheus-exporter:
     plugin: nil
     after: [zookeeper]
@@ -70,6 +64,8 @@ parts:
       JAR_SHA=$(sha256sum jmx_prometheus_javaagent.jar | cut -d " " -f1)
       if [ $JAR_SHA != $EXPECTED_SHA ]; then exit 1; fi
       cp jmx_prometheus_javaagent.jar $SNAPCRAFT_PART_INSTALL/
+    organize:
+      jmx_prometheus_javaagent.jar: opt/zookeeper/jmx_prometheus_javaagent.jar
   wrapper:
     plugin: dump
     source: snap/local
