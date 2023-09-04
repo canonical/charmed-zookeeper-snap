@@ -1,0 +1,76 @@
+name: Build and Test
+
+on:
+  workflow_dispatch:
+  pull_request:
+
+jobs:
+  build:
+    name: Build Snap
+    runs-on: ubuntu-latest
+    steps:
+      - id: checkout
+        name: Checkout repository
+        uses: actions/checkout@v3
+
+      - id: dependencies 
+        name: Upgrade linux deps
+        run: |
+          sudo apt update
+          # https://askubuntu.com/questions/1276111/error-upgrading-grub-efi-amd64-signed-special-device-old-ssd-does-not-exist
+          sudo apt-mark hold grub-efi-amd64-signed grub-efi-amd64-bin
+          sudo DEBIAN_FRONTEND=noninteractive apt upgrade --yes
+
+      - id: get-version
+        name: Retrieve workload version
+        run: |
+          VERSION=$(yq '(.version|split("-"))[0]' snap/snapcraft.yaml)
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+
+      - id: snapcraft
+        name: Build snap
+        uses: snapcore/action-build@v1
+
+      - id: upload
+        name: Upload built snap job artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: charmed-zookeeper_snap_amd64
+          path: charmed-zookeeper_${{ steps.get-version.outputs.version }}_amd64.snap
+    outputs:
+      snap-file: ${{ steps.snapcraft.outputs.snap }}
+      version: ${{ steps.get-version.outputs.version }}
+
+  test:
+    name: Test Snap
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    steps:
+      - name: Download snap file
+        uses: actions/download-artifact@v3
+        with:
+          name: charmed-zookeeper_snap_amd64
+          path: .
+
+      - name: Install snap file
+        run: |
+          sudo snap install charmed-zookeeper_${{ needs.build.outputs.version }}_amd64.snap --dangerous
+
+      - name: Set default config
+        run: |
+          sudo mkdir -p /var/snap/charmed-zookeeper/current/etc/zookeeper
+          sudo cp /snap/charmed-zookeeper/current/conf/zoo_sample.cfg /var/snap/charmed-zookeeper/current/etc/zookeeper/zoo.cfg
+
+      - name: Start snap services
+        run: |
+          sudo snap start charmed-zookeeper.daemon
+          sleep 5
+
+      - name: Check zookeeper up
+        run: |
+          echo srvr | nc localhost 2181
+
+      - name: Check keytool
+        run: |
+          charmed-zookeeper.keytool

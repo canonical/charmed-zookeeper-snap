@@ -24,7 +24,7 @@ environment:
   ZOOCFGDIR: ${SNAP_DATA}/etc/zookeeper
 
 apps:
-   daemon:
+  daemon:
     command: opt/zookeeper/with_config.sh bin/zkServer.sh start-foreground
     plugs:
       - network
@@ -32,6 +32,8 @@ apps:
       - removable-media
     install-mode: disable
     daemon: simple
+  keytool:
+    command: usr/lib/jvm/java-8-openjdk-amd64/bin/keytool
 
 slots:
   logs:
@@ -43,7 +45,7 @@ slots:
 parts:
   zookeeper:
     plugin: nil
-    source: https://dlcdn.apache.org/zookeeper/zookeeper-${SNAPCRAFT_PROJECT_VERSION}/apache-zookeeper-${SNAPCRAFT_PROJECT_VERSION}-bin.tar.gz
+    source: http://archive.apache.org/dist/zookeeper/zookeeper-${SNAPCRAFT_PROJECT_VERSION}/apache-zookeeper-${SNAPCRAFT_PROJECT_VERSION}-bin.tar.gz
     stage-packages:
     - openjdk-8-jre-headless
     - util-linux
