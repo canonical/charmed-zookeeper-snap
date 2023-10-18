@@ -45,7 +45,7 @@ slots:
 parts:
   zookeeper:
     plugin: nil
-    source: http://archive.apache.org/dist/zookeeper/zookeeper-${SNAPCRAFT_PROJECT_VERSION}/apache-zookeeper-${SNAPCRAFT_PROJECT_VERSION}-bin.tar.gz
+    source: https://github.com/canonical/central-uploader/releases/download/zookeeper-3.6.4-ubuntu0/zookeeper-3.6.4-ubuntu0-20231017125530.tgz
     stage-packages:
     - openjdk-8-jre-headless
     - util-linux
