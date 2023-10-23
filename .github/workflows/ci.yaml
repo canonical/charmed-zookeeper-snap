@@ -24,7 +24,7 @@ jobs:
       - id: get-version
         name: Retrieve workload version
         run: |
-          VERSION=$(yq '(.version|split("-"))[0]' snap/snapcraft.yaml)
+          VERSION=$(yq '.version' snap/snapcraft.yaml)
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
 
       - id: snapcraft
