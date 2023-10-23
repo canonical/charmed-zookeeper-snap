@@ -55,7 +55,7 @@ jobs:
 
       - name: Install snap file
         run: |
-          sudo snap install charmed-zookeeper_${{ needs.build.outputs.version }}_amd64.snap --dangerous
+          sudo snap install ${{ needs.build.outputs.snap-file }} --dangerous
 
       - name: Set default config
         run: |
