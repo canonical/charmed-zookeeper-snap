@@ -1,6 +1,6 @@
 name: charmed-zookeeper
 base: core22
-version: '3.6.4'
+version: '3.8.2'
 summary: Apache Zookeeper in a snap.
 description: |
   This is a snap that bundles Apache ZooKeeper together with other tools of its ecosystem in order to be used in Charmed Operators, providing automated operations management from day 0 to day 2 on the Apache ZooKeeper distributed coodrdinator, on top of a Virtual Machine cluster and K8s cluster. It is an open source, end-to-end, production ready data platform on top of cloud native technologies.
@@ -45,7 +45,7 @@ slots:
 parts:
   zookeeper:
     plugin: nil
-    source: https://github.com/canonical/central-uploader/releases/download/zookeeper-3.6.4-ubuntu0/zookeeper-3.6.4-ubuntu0-20231017125530.tgz
+    source: https://github.com/deusebio/central-uploader/releases/download/zookeeper-${SNAPCRAFT_PROJECT_VERSION}-ubuntu0/zookeeper-${SNAPCRAFT_PROJECT_VERSION}-ubuntu0-20231115215514.tgz
     stage-packages:
     - openjdk-8-jre-headless
     - util-linux
