@@ -19,13 +19,11 @@ hooks:
 environment:
   JAVA_HOME: ${SNAP}/usr/lib/jvm/java-8-openjdk-amd64/jre
   ZOO_LOG_DIR: ${SNAP_COMMON}/var/log/zookeeper
-  ZOO_LOG4J_PROP: INFO,CONSOLE,ROLLINGFILE
-  ZOO_LOG_FILE: zookeeper.log
   ZOOCFGDIR: ${SNAP_DATA}/etc/zookeeper
 
 apps:
   daemon:
-    command: opt/zookeeper/with_config.sh bin/zkServer.sh start-foreground
+    command: opt/zookeeper/bin/with_config.sh bin/zkServer.sh start-foreground
     plugs:
       - network
       - network-bind
@@ -52,11 +50,14 @@ parts:
     - curl
     override-build: |-
       snapcraftctl build
-      cp -r ./* $SNAPCRAFT_PART_INSTALL
+      
+      mkdir -p $SNAPCRAFT_PART_INSTALL/opt/zookeeper
+      mkdir -p $SNAPCRAFT_PART_INSTALL/opt/zookeeper/plugins
+      
+      cp -r ./* $SNAPCRAFT_PART_INSTALL/opt/zookeeper
     override-prime: |-
       snapcraftctl prime
       rm -vf usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/cacerts
-      mkdir -p $SNAPCRAFT_PART_INSTALL/opt/zookeeper
   prometheus-exporter:
     plugin: nil
     after: [zookeeper]
@@ -67,7 +68,7 @@ parts:
       if [ $JAR_SHA != $EXPECTED_SHA ]; then exit 1; fi
       cp jmx_prometheus_javaagent.jar $SNAPCRAFT_PART_INSTALL/
     organize:
-      jmx_prometheus_javaagent.jar: opt/zookeeper/jmx_prometheus_javaagent.jar
+      jmx_prometheus_javaagent.jar: opt/zookeeper/plugins/jmx_prometheus_javaagent.jar
   wrapper:
     plugin: dump
     source: snap/local
