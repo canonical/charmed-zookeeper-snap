@@ -14,8 +14,8 @@ mkdir -p $DATA
 
 cp "${SNAP}"/etc/$COMPONENT/* $CONF
 
-chmod -R 770 "${SNAP_DATA}"/*
-chmod -R 770 "${SNAP_COMMON}"/*
+chmod -R 775 "${SNAP_DATA}"/*
+chmod -R 775 "${SNAP_COMMON}"/*
 
 chown -R snap_daemon "${SNAP_DATA}"/*
 chown -R snap_daemon "${SNAP_COMMON}"/*
