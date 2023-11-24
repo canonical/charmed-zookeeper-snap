@@ -1,6 +1,6 @@
 # Zookeeper Snap
 
-[![CharmHub Badge](https://snapcraft.io/zookeeper/badge.svg)](https://snapcraft.io/zookeeper)
+[![CharmHub Badge](https://snapcraft.io/charmed-zookeeper/badge.svg)](https://snapcraft.io/charmed-zookeeper)
 [![Release](https://github.com/canonical/charmed-zookeeper-snap/actions/workflows/publish.yaml/badge.svg)](https://github.com/canonical/charmed-zookeeper-snap/actions/workflows/publish.yaml)
 
 This repository contains the packaging metadata for creating a snap of Zookeeper built from the official Zookeeper release artifacts.  For more information on snaps, visit [snapcraft.io](https://snapcraft.io/). 
