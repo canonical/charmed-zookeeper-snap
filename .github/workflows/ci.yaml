@@ -60,7 +60,7 @@ jobs:
       - name: Set default config
         run: |
           sudo mkdir -p /var/snap/charmed-zookeeper/current/etc/zookeeper
-          sudo cp /snap/charmed-zookeeper/current/conf/zoo_sample.cfg /var/snap/charmed-zookeeper/current/etc/zookeeper/zoo.cfg
+          sudo cp /snap/charmed-zookeeper/current/opt/zookeeper/conf/zoo_sample.cfg /var/snap/charmed-zookeeper/current/etc/zookeeper/zoo.cfg
 
       - name: Start snap services
         run: |
