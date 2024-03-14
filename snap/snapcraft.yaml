@@ -55,7 +55,7 @@ parts:
       cp -r ./* $SNAPCRAFT_PART_INSTALL/opt/zookeeper
     override-prime: |-
       snapcraftctl prime
-      rm -vf usr/lib/jvm/java-18-openjdk-amd64/jre/lib/security/cacerts
+      rm -vf usr/lib/jvm/java-18-openjdk-amd64/lib/security/cacerts
   prometheus-exporter:
     plugin: nil
     after: [zookeeper]
