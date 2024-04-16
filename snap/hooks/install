@@ -10,12 +10,22 @@ export DATA="${SNAP_COMMON}"/var/lib/$COMPONENT
 
 mkdir -p $CONF
 mkdir -p $LOGS
-mkdir -p $DATA
+
+if [ ! -d "${DATA}" ]; then
+    mkdir -p "${DATA}"
+    chmod g+s "${DATA}"
+    chmod 770 "${DATA}" # must be before chown
+    chown 584788 "${DATA}"
+    chgrp root "${DATA}"  # not needed but shown for clarity
+fi
+# mkdir -p $DATA
 
 cp "${SNAP}"/etc/$COMPONENT/* $CONF
 
-chmod -R 770 "${SNAP_DATA}"/*
-chmod -R 770 "${SNAP_COMMON}"/*
+# chmod g+s "${SNAP_DATA}"
 
-chown -R snap_daemon "${SNAP_DATA}"/*
-chown -R snap_daemon "${SNAP_COMMON}"/*
+chmod -R 770 "${SNAP_DATA}"/*
+# chmod -R 770 "${SNAP_COMMON}"/*
+
+chown -R 584788:root "${SNAP_DATA}"/*
+# chown -R 584788:root "${SNAP_COMMON}"/*
