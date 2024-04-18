@@ -4,9 +4,6 @@ on:
   workflow_dispatch:
   pull_request:
 
-env:
-  RELEASE: edge
-
 jobs:
   build:
     name: Build Snap
@@ -40,22 +37,6 @@ jobs:
         with:
           name: charmed-zookeeper_snap_amd64
           path: charmed-zookeeper_${{ steps.get-version.outputs.version }}_amd64.snap
-      
-      - name: Set snap release channel
-        run: |
-          version="$(cat snap/snapcraft.yaml | yq .version)"
-          channel="${version%%.*}/${{env.RELEASE}}"
-          
-          echo "version=${version}" >> $GITHUB_ENV
-          echo "channel=${channel}" >> $GITHUB_ENV
-          
-      - name: Publish snap to Store
-        uses: snapcore/action-publish@v1
-        env:
-          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.STORE_LOGIN }}
-        with:
-          snap: charmed-zookeeper_${{env.version}}_amd64.snap
-          release: ${{env.channel}}/dpe-2597
     outputs:
       snap-file: ${{ steps.snapcraft.outputs.snap }}
       version: ${{ steps.get-version.outputs.version }}
