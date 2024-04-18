@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+# Installation hook for charmed-zookeeper snap.
+#
+# Note: '584788' refers to the snap_daemon user and group within a snap,
+# exposed as user ID (UID) and group ID (GID).
+#
+# FIXME (24.04): From snapd 2.61 onwards, snap_daemon is being deprecated and
+# replaced with _daemon_ (with underscores), which now possesses a UID of 584792.
+# See https://snapcraft.io/docs/system-usernames.
 
 set -eux
 
