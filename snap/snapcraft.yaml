@@ -44,6 +44,7 @@ parts:
   zookeeper:
     plugin: nil
     source: https://github.com/canonical/central-uploader/releases/download/zookeeper-${SNAPCRAFT_PROJECT_VERSION}-ubuntu0/zookeeper-${SNAPCRAFT_PROJECT_VERSION}-ubuntu0-20240906133615.tgz
+    source-checksum: sha512/9be903b1cd59cbd2647f49a39c1b4278dae06b945d90ad12d0ef327e51b8656ba3844a30dbd6cee5be3e13bd0d1f6f772ff212e98bbc95f48c787f19a34ca2f8
     stage-packages:
     - openjdk-11-jre-headless
     - util-linux
