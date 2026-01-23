@@ -22,10 +22,6 @@ jobs:
             arch: amd64
           - os: ubuntu-22.04-arm
             arch: arm64
-    name: Test Snap
-    runs-on: ubuntu-latest
-    needs:
-      - build
     steps:
       - name: Download snap file
         uses: actions/download-artifact@v6
