@@ -40,7 +40,7 @@ jobs:
     name: Release snap
     needs:
       - build
-      - release_checks
+      - checks
     uses: canonical/data-platform-workflows/.github/workflows/release_snap.yaml@v41.1.0
     with:
       channel: ${{ needs.release_checks.outputs.track }}/${{ needs.release_checks.outputs.risk }}
