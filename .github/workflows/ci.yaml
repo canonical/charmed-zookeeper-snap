@@ -6,56 +6,37 @@ on:
 
 jobs:
   build:
-    name: Build Snap
-    runs-on: ubuntu-latest
-    steps:
-      - id: checkout
-        name: Checkout repository
-        uses: actions/checkout@v3
-
-      - id: dependencies 
-        name: Upgrade linux deps
-        run: |
-          sudo apt update
-          # https://askubuntu.com/questions/1276111/error-upgrading-grub-efi-amd64-signed-special-device-old-ssd-does-not-exist
-          sudo apt-mark hold grub-efi-amd64-signed grub-efi-amd64-bin
-          sudo DEBIAN_FRONTEND=noninteractive apt upgrade --yes
-
-      - id: get-version
-        name: Retrieve workload version
-        run: |
-          VERSION=$(yq '(.version|split("-"))[0]' snap/snapcraft.yaml)
-          echo "version=${VERSION}" >> $GITHUB_OUTPUT
-
-      - id: snapcraft
-        name: Build snap
-        uses: snapcore/action-build@v1
-
-      - id: upload
-        name: Upload built snap job artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: charmed-zookeeper_snap_amd64
-          path: charmed-zookeeper_${{ steps.get-version.outputs.version }}_amd64.snap
-    outputs:
-      snap-file: ${{ steps.snapcraft.outputs.snap }}
-      version: ${{ steps.get-version.outputs.version }}
+    name: Build snap
+    uses: canonical/data-platform-workflows/.github/workflows/build_snap.yaml@v41.1.0
 
   test:
+    name: Test Snap (${{ matrix.system.arch }})
+    runs-on: ${{ matrix.system.os }}
+    timeout-minutes: 90
+    needs:
+      - build
+    strategy:
+      matrix:
+        system:
+          - os: ubuntu-22.04
+            arch: amd64
+          - os: ubuntu-22.04-arm
+            arch: arm64
     name: Test Snap
     runs-on: ubuntu-latest
     needs:
       - build
     steps:
       - name: Download snap file
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v6
         with:
-          name: charmed-zookeeper_snap_amd64
-          path: .
+          pattern: ${{ needs.build.outputs.artifact-prefix }}-*
+          merge-multiple: true
 
       - name: Install snap file
         run: |
-          sudo snap install charmed-zookeeper_${{ needs.build.outputs.version }}_amd64.snap --dangerous
+          FILE=$(ls -1 *${{ matrix.system.arch }}.snap | tail -n1)
+          sudo snap install $FILE --dangerous
 
       - name: Set default config
         run: |
@@ -78,4 +59,3 @@ jobs:
       - name: Check transaction-log-toolkit
         run: |
           charmed-zookeeper.transaction-log-toolkit -h
-
