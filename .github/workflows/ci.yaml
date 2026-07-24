@@ -4,10 +4,13 @@ on:
   workflow_dispatch:
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   build:
     name: Build snap
-    uses: canonical/data-platform-workflows/.github/workflows/build_snap.yaml@v41.1.0
+    uses: canonical/data-platform-workflows/.github/workflows/build_snap.yaml@v50.2.0
 
   test:
     name: Test Snap (${{ matrix.system.arch }})
@@ -24,7 +27,7 @@ jobs:
             arch: arm64
     steps:
       - name: Download snap file
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v8
         with:
           pattern: ${{ needs.build.outputs.artifact-prefix }}-*
           merge-multiple: true
