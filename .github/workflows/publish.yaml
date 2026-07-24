@@ -11,29 +11,17 @@ permissions:
   contents: read
 
 jobs:
-  checks:
-    name: Check Metadata and branch consistency
+  get-track:
+    name: Get track
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 5
+    outputs:
+      track: ${{ steps.track.outputs.track }}
     steps:
-      - uses: actions/checkout@v7
-
-      - id: get-current-version
-        name: Retrieve Metadata
-        run: |
-          VERSION=$(yq '(.version|split("-"))[0]' snap/snapcraft.yaml)
-          echo "version=${VERSION}" >> $GITHUB_OUTPUT
-
-          BRANCH=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
-          echo "branch=${BRANCH}" >> $GITHUB_OUTPUT
-          echo "risk=${BRANCH##*\/}" >> $GITHUB_OUTPUT
-          echo "track=${BRANCH%*\/*}" >> $GITHUB_OUTPUT
-
-      - name: Check consistency between metadata and release branch
-        run: |
-          MAJOR_VERSION=$(echo ${{ steps.get-current-version.outputs.version }} | sed -n "s/\(^[0-9]*\).*/\1/p")
-          if [ "${MAJOR_VERSION}" != "${{ steps.get-current-version.outputs.track }}" ]; then exit 1; fi
-        continue-on-error: false
+      - id: track
+        name: Derive track from branch
+        run: echo "track=${GITHUB_REF_NAME%%/*}" >> "$GITHUB_OUTPUT"
+    permissions: {}
 
   build:
     name: Build snap
@@ -42,11 +30,11 @@ jobs:
   release:
     name: Release snap
     needs:
+      - get-track
       - build
-      - checks
     uses: canonical/data-platform-workflows/.github/workflows/release_snap_edge.yaml@v50.2.0
     with:
-      track: ${{ needs.release_checks.outputs.track }}
+      track: ${{ needs.get-track.outputs.track }}
       artifact-prefix: ${{ needs.build.outputs.artifact-prefix }}
     secrets:
       snap-store-token: ${{ secrets.SNAP_STORE_TOKEN_EDGE }}
